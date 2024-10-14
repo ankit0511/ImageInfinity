@@ -1,0 +1,55 @@
+/* ImageGallery.css */
+
+.image-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+.masonry {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.image {
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.image:hover {
+    transform: scale(1.05);
+}
+
+/* Shimmer effect for loading images */
+.skeleton-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.skeleton-item {
+    width: calc(33.33% - 16px); /* Adjust width based on the number of columns */
+    height: 200px; /* Set desired height */
+    margin: 8px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
