@@ -7,8 +7,13 @@ import './css/ImageGallery.css';
 
 const API_KEY = '3WIgPehJxybIe6Pqll8wCcoX326leGDHA3ZawQeVpSVzFIS3fy2hSrJF';
 
+interface Image {
+    url: string;
+    description: string;
+}
+
 const ImageGallery: React.FC = () => {
-    const [images, setImages] = useState<string[]>([]);
+    const [images, setImages] = useState<Image[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
@@ -23,12 +28,16 @@ const ImageGallery: React.FC = () => {
                 `https://api.pexels.com/v1/search?query=nature&page=${page}&per_page=25`,
                 { headers: { Authorization: API_KEY } }
             );
-    
-            const newImages = response.data.photos.map((img: { src: { medium: string } }) => img.src.medium);
-    
+
+            // Extract image URL and description
+            const newImages = response.data.photos.map((img: { src: { medium: string }, alt: string }) => ({
+                url: img.src.medium,
+                description: img.alt || 'No description available',
+            }));
+
             setImages((prevImages) => [...prevImages, ...newImages]);
             setLoading(false);
-    
+
             if (newImages.length < 25) {
                 setHasMore(false);
             }
@@ -37,7 +46,6 @@ const ImageGallery: React.FC = () => {
             setLoading(false);
         }
     }, [page]);
-    
 
     useEffect(() => {
         fetchImages();
@@ -80,9 +88,9 @@ const ImageGallery: React.FC = () => {
                     {images.map((img, index) => (
                         <img
                             key={index}
-                            src={img}
-                            alt=""
-                            onClick={() => openModal(img, "Image description here")}
+                            src={img.url}
+                            alt={img.description}
+                            onClick={() => openModal(img.url, img.description)}
                             className="image"
                         />
                     ))}
